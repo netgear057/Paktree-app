@@ -1,0 +1,39 @@
+{
+  "resources": [
+    {
+      "title": "Find me on Mastodon",
+      "link": "",
+      "imageUrl": "https://images.unsplash.com/photo-1684487747385-442d674962f2"
+    },
+    {
+      "title": "Welcome to K-Tech",
+      "link": "",
+      "imageUrl": "https://images.unsplash.com/photo-1684487747385-442d674962f2"
+    },
+    {
+      "title": "Some sort of third title",
+      "link": "",
+      "imageUrl": "https://images.unsplash.com/photo-1684487747385-442d674962f2"
+    },
+  {
+      "title": "Some sort of third title",
+      "link": "",
+      "imageUrl": "https://images.unsplash.com/photo-1684487747385-442d674962f2"
+    },
+  {
+      "title": "Some sort of third title",
+      "link": "",
+      "imageUrl": "https://images.unsplash.com/photo-1684487747385-442d674962f2"
+    },
+      {
+      "title": "Some sort of third title",
+      "link": "",
+      "imageUrl": "https://images.unsplash.com/photo-1684487747385-442d674962f2"
+    },
+    {
+      "title": "Super item number the last",
+      "link": "",
+      "imageUrl": "https://images.unsplash.com/photo-1684487747385-442d674962f2"
+    }
+  ]
+}

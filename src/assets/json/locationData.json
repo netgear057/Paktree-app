@@ -1,0 +1,55 @@
+[
+  {
+    "province": "Punjab",
+    "districts": [
+      {
+        "name": "Lahore",
+        "tehsils": ["Model Town", "Raiwind", "Shalimar"]
+      },
+      {
+        "name": "Faisalabad",
+        "tehsils": ["Jaranwala", "Samundri", "Tandlianwala"]
+      }
+    ]
+  },
+  {
+    "province": "Sindh",
+    "districts": [
+      {
+        "name": "Karachi",
+        "tehsils": ["Gulshan", "Malir", "Clifton"]
+      },
+      {
+        "name": "Hyderabad",
+        "tehsils": ["Latifabad", "Qasimabad", "City"]
+      }
+    ]
+  },
+  {
+    "province": "Khyber Pakhtunkhwa",
+    "districts": [
+      {
+        "name": "Peshawar",
+        "tehsils": ["Mathra", "Shabqadar", "Badaber"]
+      }
+    ]
+  },
+  {
+    "province": "Balochistan",
+    "districts": [
+      {
+        "name": "Quetta",
+        "tehsils": ["Sariab", "Zarghoon", "Chiltan"]
+      }
+    ]
+  },
+  {
+    "province": "Azad Jammu and Kashmir",
+    "districts": [
+      {
+        "name": "Muzaffarabad",
+        "tehsils": ["Hattian", "Leepa"]
+      }
+    ]
+  }
+]

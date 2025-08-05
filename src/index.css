@@ -1,0 +1,11 @@
+
+
+@import "tailwindcss";
+body {
+  background-color: #f1f1f1;
+  padding: 0;
+}
+
+input, select, textarea {
+  @apply shadow-sm bg-gray-50 border border-gray-300 text-gray-500  text-base font-bold  rounded-lg focus:ring-gray-600 focus:border-gray-600 block w-full p-2.5;
+}
