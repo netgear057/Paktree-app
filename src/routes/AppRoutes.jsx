@@ -8,6 +8,8 @@ import PageNotFound from '../pages/PageNotFound';
 import PostProduct from '../pages/PostProduct';
 import ProductView from '../pages/ProductView';
 import FindProduct from '../pages/FindProduct';
+import Login from '../pages/Login';
+import Signup from '../pages/Signup';
 export default function AppRoutes() {
   return (
     <Routes>
@@ -18,6 +20,8 @@ export default function AppRoutes() {
         <Route path="/post-ad" element={<PostProduct />} />
         <Route path="/product-details/:id" element={<ProductView />} />
         <Route path="/find-product" element={<FindProduct />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Signup />} />
 
       </Route>
       {/* <Route path="/login" element={<Login />} /> */}

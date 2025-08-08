@@ -1,25 +1,63 @@
-import { createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
-import { API } from '../config/apiCongig';
+import { createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
+import { API } from "../config/apiCongig";
+import axiosInstance from "../utils/Axios";
 
+export const register = createAsyncThunk(
+  "auth/register",
+  async (userData, thunkAPI) => {
+    try {
+      const res = await axiosInstance.post("/users/register", userData);
+      return res.data;
+    } catch (err) {
+      return thunkAPI.rejectWithValue(
+        err.response?.data?.message || "Registration failed"
+      );
+    }
+  }
+);
 
-// export const fetchProducts = createAsyncThunk('products/fetchAll', async () => {
-//   try {
-//     const res =  await axios.get(`${API}/products`)
-//     return res.data
-//   } catch (error) {
-//     return rejectWithValue(error.response?.data || error.message)
-//   }
+// LOGIN
+export const login = createAsyncThunk(
+  "auth/login",
+  async ({ email, password }, thunkAPI) => {
+    try {
+      const res = await axiosInstance.post(
+        `/users/login`,
+        { email, password },
+        {
+          withCredentials: true,
+        }
+      );
+      return res.data;
+    } catch (err) {
+      return thunkAPI.rejectWithValue(
+        err.response?.data?.message || "Login failed"
+      );
+    }
+  }
+);
 
-// });
-
+// REFRESH
+export const refreshToken = createAsyncThunk(
+  "auth/refresh",
+  async (_, thunkAPI) => {
+    try {
+      const res = await axios.post("/users/refresh");
+      return res.data;
+    } catch (err) {
+      return thunkAPI.rejectWithValue("Session expired");
+    }
+  }
+);
 
 export const fetchProducts = createAsyncThunk(
-  'products/fetchAll',
+  "products/fetchAll",
   async (filters, { rejectWithValue }) => {
     try {
-      const res = await axios.get(`${API}/products`, {
-        params: filters
+      const res = await axiosInstance.get("/products", {
+        params: filters,
+        withCredentials: true, // ✅ correctly placed inside config object
       });
       return res.data;
     } catch (error) {
@@ -28,9 +66,8 @@ export const fetchProducts = createAsyncThunk(
   }
 );
 
-
 export const postProduct = createAsyncThunk(
-  'products/postProduct',
+  "products/postProduct",
   async (productData, { rejectWithValue }) => {
     try {
       const res = await axios.post(`${API}/products`, productData);
