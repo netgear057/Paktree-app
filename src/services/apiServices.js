@@ -43,7 +43,7 @@ export const refreshToken = createAsyncThunk(
   "auth/refresh",
   async (_, thunkAPI) => {
     try {
-      const res = await axios.post("/users/refresh");
+      const res = await axiosInstance.post("/users/refresh");
       return res.data;
     } catch (err) {
       return thunkAPI.rejectWithValue("Session expired");
@@ -70,10 +70,22 @@ export const postProduct = createAsyncThunk(
   "products/postProduct",
   async (productData, { rejectWithValue }) => {
     try {
-      const res = await axios.post(`${API}/products`, productData);
+      const res = await axiosInstance.post(`${API}/products`, productData);
       return res.data;
     } catch (err) {
       return rejectWithValue(err.response?.data || err.message);
     }
   }
 );
+
+export const userAds = createAsyncThunk(
+  "ads/userAds",
+  async (userId, { rejectWithValue}) => {
+    try {
+      const res = await axiosInstance.get(`${API}/products/${userId}`)
+      return res.data;
+    } catch (err) {
+      return rejectWithValue(err.response?.data || err.message)
+    }
+  }
+)

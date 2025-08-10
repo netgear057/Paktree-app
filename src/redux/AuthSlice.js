@@ -1,7 +1,7 @@
 // src/store/authSlice.js
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { login, refreshToken, register } from "../services/apiServices";
+import { login, refreshToken, register,userAds } from "../services/apiServices";
 
 
 const storedUser = localStorage.getItem('user') ?
@@ -13,6 +13,7 @@ const authSlice = createSlice({
   name: "auth",
   initialState: {
     user: storedUser,
+    allAds : [],
     accessToken: storedToken,
     isAuthenticated: !! storedUser,
     status: "idle",
@@ -79,7 +80,23 @@ const authSlice = createSlice({
         state.user = null;
         state.accessToken = null;
         state.error = action.payload;
-      });
+      })
+
+      // user ads
+
+      .addCase(userAds.pending, (state) => {
+        state.status = "loading";
+        state.error = null;
+      })
+      .addCase(userAds.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.allAds = action.payload;
+    
+      })
+      .addCase(userAds.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
+      })
   },
 });
 

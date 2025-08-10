@@ -33,7 +33,6 @@ function classNames(...classes) {
 export default function Navbar() {
 
   const {isAuthenticated, user} = useSelector(state => state.auth)
-  console.log(isAuthenticated)
 
  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const location = useLocation();
@@ -135,7 +134,7 @@ const handleLogout = async () => {
     <MenuItems className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black/5 focus:outline-none">
       <MenuItem>
         <Link
-          to="/"
+          to="/my-profile"
           className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
         >
           My Profile
@@ -143,7 +142,7 @@ const handleLogout = async () => {
       </MenuItem>
       <MenuItem>
         <Link
-          to="/"
+          to="/my-profile"
           className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
         >
           My Ads

@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { postProduct } from "../services/apiServices";
 import { toast } from "react-toastify";
 import { Formik, Form, Field, ErrorMessage } from "formik";
@@ -14,7 +14,10 @@ const PostItem = () => {
   
 const navigate = useNavigate()
 const fileInputRef = useRef(null);
-let userId = "1776964"
+
+const {user} = useSelector(state => state.auth)
+let userId = user._id
+console.log(userId)
   const initialValues = {
     userId:userId,
     title: "",
@@ -48,7 +51,7 @@ let userId = "1776964"
     phone: Yup.string()
       .required("Phone is required")
       .max(25, "Phone must be at most 25 characters"),
-    whatsapp: Yup.string().max(15, "Whatsapp must be at most 15 characters"),
+    whatsapp: Yup.string().max(25, "Whatsapp must be at most 25 characters"),
     image: Yup.mixed().nullable(),
   });
 
@@ -85,11 +88,11 @@ let userId = "1776964"
 
   const handleSubmit = async (values, { resetForm }) => {
   try {
-    // if (!userId) {
-    //     console.log("No userId, aborting submit.");
-    //   toast.error("User not logged in. Cannot post ad.");
-    //   return;
-    // }
+    if (!userId) {
+        console.log("No userId, aborting submit.");
+      toast.error("User not logged in. Cannot post ad.");
+      return;
+    }
     const formData = new FormData();
     for (const key in values) {
       formData.append(key, values[key]);

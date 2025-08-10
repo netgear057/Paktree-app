@@ -1,21 +1,22 @@
-import { useState } from "react"
-import { useDispatch, useSelector } from "react-redux"
-import { login, register } from "../services/apiServices"
-import { toast } from "react-toastify"
-import { useNavigate } from "react-router-dom"
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { login, register } from "../services/apiServices";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { Link } from "react-router-dom"
+import { Link } from "react-router-dom";
 export default function RegisterForm() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
   const initialValues = {
     username: "",
     email: "",
     phone: "",
     password: "",
-    confirmPassword: ""
+    confirmPassword: "",
   };
 
   const validationSchema = Yup.object({
@@ -25,7 +26,9 @@ export default function RegisterForm() {
       .matches(/^[0-9]+$/, "Phone must be a number")
       .min(10, "Phone must be at least 10 digits")
       .required("Phone is required"),
-    password: Yup.string().min(6, "Password must be at least 6 characters").required("Password is required"),
+    password: Yup.string()
+      .min(6, "Password must be at least 6 characters")
+      .required("Password is required"),
     confirmPassword: Yup.string()
       .oneOf([Yup.ref("password"), null], "Passwords must match")
       .required("Confirm your password"),
@@ -36,9 +39,9 @@ export default function RegisterForm() {
       const { confirmPassword, ...formData } = values;
       const result = await dispatch(register(formData));
 
-      if (result.meta.requestStatus === 'fulfilled') {
+      if (result.meta.requestStatus === "fulfilled") {
         toast.success("Registered Successfully!");
-        navigate('/');
+        navigate(from, { replace: true });
       } else {
         toast.error(result.payload?.message || "Registration failed");
       }
@@ -73,7 +76,10 @@ export default function RegisterForm() {
             <Form className="space-y-6">
               {/* Username */}
               <div>
-                <label htmlFor="username" className="block text-sm font-medium text-gray-900">
+                <label
+                  htmlFor="username"
+                  className="block text-sm font-medium text-gray-900"
+                >
                   Username
                 </label>
                 <div className="mt-2">
@@ -84,13 +90,20 @@ export default function RegisterForm() {
                     autoComplete="username"
                     className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600 sm:text-sm"
                   />
-                  <ErrorMessage name="username" component="div" className="text-red-600 text-sm mt-1" />
+                  <ErrorMessage
+                    name="username"
+                    component="div"
+                    className="text-red-600 text-sm mt-1"
+                  />
                 </div>
               </div>
 
               {/* Email */}
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-900">
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium text-gray-900"
+                >
                   Email address
                 </label>
                 <div className="mt-2">
@@ -101,13 +114,20 @@ export default function RegisterForm() {
                     autoComplete="email"
                     className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600 sm:text-sm"
                   />
-                  <ErrorMessage name="email" component="div" className="text-red-600 text-sm mt-1" />
+                  <ErrorMessage
+                    name="email"
+                    component="div"
+                    className="text-red-600 text-sm mt-1"
+                  />
                 </div>
               </div>
 
               {/* Phone */}
               <div>
-                <label htmlFor="phone" className="block text-sm font-medium text-gray-900">
+                <label
+                  htmlFor="phone"
+                  className="block text-sm font-medium text-gray-900"
+                >
                   Phone
                 </label>
                 <div className="mt-2">
@@ -118,13 +138,20 @@ export default function RegisterForm() {
                     autoComplete="tel"
                     className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600 sm:text-sm"
                   />
-                  <ErrorMessage name="phone" component="div" className="text-red-600 text-sm mt-1" />
+                  <ErrorMessage
+                    name="phone"
+                    component="div"
+                    className="text-red-600 text-sm mt-1"
+                  />
                 </div>
               </div>
 
               {/* Password */}
               <div>
-                <label htmlFor="password" className="block text-sm font-medium text-gray-900">
+                <label
+                  htmlFor="password"
+                  className="block text-sm font-medium text-gray-900"
+                >
                   Password
                 </label>
                 <div className="mt-2">
@@ -135,13 +162,20 @@ export default function RegisterForm() {
                     autoComplete="new-password"
                     className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600 sm:text-sm"
                   />
-                  <ErrorMessage name="password" component="div" className="text-red-600 text-sm mt-1" />
+                  <ErrorMessage
+                    name="password"
+                    component="div"
+                    className="text-red-600 text-sm mt-1"
+                  />
                 </div>
               </div>
 
               {/* Confirm Password */}
               <div>
-                <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-900">
+                <label
+                  htmlFor="confirmPassword"
+                  className="block text-sm font-medium text-gray-900"
+                >
                   Confirm Password
                 </label>
                 <div className="mt-2">
@@ -152,7 +186,11 @@ export default function RegisterForm() {
                     autoComplete="new-password"
                     className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600 sm:text-sm"
                   />
-                  <ErrorMessage name="confirmPassword" component="div" className="text-red-600 text-sm mt-1" />
+                  <ErrorMessage
+                    name="confirmPassword"
+                    component="div"
+                    className="text-red-600 text-sm mt-1"
+                  />
                 </div>
               </div>
 
@@ -163,7 +201,7 @@ export default function RegisterForm() {
                   disabled={isSubmitting}
                   className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 >
-                  {isSubmitting ? 'Submitting...' : 'Sign Up'}
+                  {isSubmitting ? "Submitting..." : "Sign Up"}
                 </button>
               </div>
             </Form>
@@ -171,8 +209,11 @@ export default function RegisterForm() {
         </Formik>
 
         <p className="mt-10 text-center text-sm text-gray-500">
-          Already have an account?{' '}
-          <Link to="/register" className="font-semibold text-indigo-600 hover:text-indigo-500">
+          Already have an account?{" "}
+          <Link
+            to="/register"
+            className="font-semibold text-indigo-600 hover:text-indigo-500"
+          >
             Sign in
           </Link>
         </p>
