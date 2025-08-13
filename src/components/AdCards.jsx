@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { userAds } from "../services/apiServices";
+import { handleFeature, userAds } from "../services/apiServices";
 import { Link } from "react-router-dom";
 
 const AdCards = () => {
@@ -44,9 +44,17 @@ const AdCards = () => {
 
         {/* Action Button */}
         <div className="mt-4">
-          <button className="w-full py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-            View Details
+          {ad.featured ? (
+
+            <button className="w-full py-2 px-4 bg-slate-700 text-white rounded-lg hover:bg-slate-600  " disabled >
+             Featured
           </button>
+          ):(
+             
+          <button className="w-full py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 cursor-pointer" onClick={() => handleFeature({ postId: ad._id, userId })}>
+            Make Ad Feature
+          </button>
+          )}
         </div>
       </div>
     </div>

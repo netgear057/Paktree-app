@@ -89,3 +89,19 @@ export const userAds = createAsyncThunk(
     }
   }
 )
+
+export  const handleFeature = async ({postId, userId}) => {
+    try {
+      const res = await fetch(`${API}/stripe/create-checkout-session`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ postId, userId }),
+      });
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url; // Redirect to Stripe Checkout
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };

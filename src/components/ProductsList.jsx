@@ -189,7 +189,7 @@ export default function List() {
       </div>
       <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
         <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-          {items?.data?.map((product, i) => (
+          {/* {items?.data?.map((product, i) => (
             <div key={i} className="group relative cursor-pointer shadow-sm">
               <img
                 alt="Image"
@@ -217,7 +217,48 @@ export default function List() {
                 </p>
               </div>
             </div>
-          ))}
+          ))} */}
+
+          {items?.data?.map((product, i) => (
+  <div key={i} className="group relative cursor-pointer shadow-sm">
+    
+    {/* Featured badge */}
+    {product.featured && (
+      <span className="absolute top-2 right-2 z-10 bg-slate-500 text-white text-xs font-bold px-2 py-1 rounded">
+        Featured
+      </span>
+    )}
+
+    <img
+      alt="Image"
+      src={product.image || "/paktree.png"}
+      className="aspect-square w-full rounded-md bg-gray-200 object-cover group-hover:opacity-75 lg:aspect-auto lg:h-80"
+    />
+
+    <div className="mt-4 flex justify-between gap-4 px-2">
+      <div>
+        <h3 className="text-sm font-semibold text-gray-900">
+          <Link to={`/product-details/${product._id}`}>
+            <span aria-hidden="true" className="absolute inset-0" />
+            {product.title}
+          </Link>
+        </h3>
+      </div>
+      <p className="text-base font-semibold text-green-700">
+        {product.price}
+      </p>
+    </div>
+
+    <div className="flex justify-items-start gap-3 mt-2 px-2">
+      <IconWithFallback src="/marker.png" alt="Location" />
+      <p className="text-sm font-light text-gray-500">
+        {product.tehsil || ""}, {product.district || ""},{" "}
+        {product.province || ""}
+      </p>
+    </div>
+  </div>
+))}
+
         </div>
       </div>
       <Pagination

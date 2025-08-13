@@ -11,6 +11,7 @@ import FindProduct from '../pages/FindProduct';
 import Login from '../pages/Login';
 import Signup from '../pages/Signup';
 import MyProfile from '../pages/MyProfile';
+import PaymentSuccess from '../components/PaymentSuccess'
 export default function AppRoutes() {
   return (
     <Routes>
@@ -31,6 +32,7 @@ export default function AppRoutes() {
         <Route element={<WithNav />}>
         <Route path="/post-ad" element={<PostProduct />} />
         <Route path="/my-profile" element={<MyProfile />} />
+        <Route path="/payment-success" element={<PaymentSuccess />} />
         </Route>
       </Route>
 
