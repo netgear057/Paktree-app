@@ -4,6 +4,7 @@ import { fetchProducts, postProduct } from '../services/apiServices'
 
 const initialState = {
   items: [],
+  total: null,
   loading: false,
   error: null,
 };
@@ -23,6 +24,7 @@ const productSlice = createSlice({
       .addCase(fetchProducts.fulfilled, (state, action) => {
         state.loading = false;
         state.items = action.payload;
+        state.total = action.payload.total;
       })
       .addCase(fetchProducts.rejected, (state, action) => {
         state.loading = false;

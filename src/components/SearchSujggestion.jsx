@@ -1,9 +1,24 @@
 import { useState, useRef, useEffect } from 'react';
+import { useDispatch, useSelector } from "react-redux";
 
 // Data
-import data from '../assets/json/carousol.json';
+import { fetchProducts } from '../services/apiServices';
+import { Link } from 'react-router-dom';
 
 const SearchSuggestion = () => {
+
+ const dispatch = useDispatch();
+  const { items } = useSelector((state) => state.products);
+useEffect(() => {
+    dispatch(fetchProducts());
+}, [dispatch]);
+
+const searchSuggestions = [...(items?.data || [])] // clone
+  .sort(() => Math.random() - 0.5)
+  .slice(0, 10);
+
+
+
   const maxScrollWidth = useRef(0);
   const [currentIndex, setCurrentIndex] = useState(0);
   const carousel = useRef(null);
@@ -103,24 +118,24 @@ const SearchSuggestion = () => {
           ref={carousel}
           className="carousel-container relative flex gap-4 overflow-hidden scroll-smooth snap-x snap-mandatory touch-pan-x z-0 "
         >
-          {data.resources.map((resource, index) => {
+          {searchSuggestions?.map((resource, index) => {
             return (
                 <div className='flex flex-col'>
               <div
                 key={index}
                 className="carousel-item text-center relative w-64 h-64 snap-start"
               >
-                <a
-                  href={resource.link}
+                <Link
+                  to={`/product-details/${resource._id}`}
                   className="h-full w-full aspect-square block bg-origin-padding bg-left-top bg-cover bg-no-repeat z-0"
-                  style={{ backgroundImage: `url(${resource.imageUrl || ''})` }}
+                  style={{ backgroundImage: `url(${resource.image || "/paktree.png"})` }}
                 >
                   <img
-                    src={resource.imageUrl || ''}
-                    alt={resource.title}
+                    src={resource.image || '/paktree.png'}
+                    alt=""
                     className="w-full aspect-square hidden"
                   />
-                </a>
+                </Link>
                 
               </div>
             
