@@ -52,13 +52,7 @@ export default function List() {
     dispatch(fetchProducts(filters));
   }, [page, filters, dispatch]);
 
-  // Run when search button is clicked
-  useEffect(() => {
-    if (searchTriggered) {
-      dispatch(fetchProducts(filters));
-      setSearchTriggered(false);
-    }
-  }, [searchTriggered, filters, dispatch]);
+ 
 
   // handle filter changes
   const handleChange = (e) => {
@@ -178,12 +172,12 @@ export default function List() {
             </Select>
           </div>
           <div className=" flex w-full  sm:flex-1 justify-center items-end">
-            <button
+            {/* <button
               className="bg-green-700 hover:bg-green-900 px-8 py-2 rounded-md text-white font-bold text-base"
               onClick={handleSearch}
             >
               Search
-            </button>
+            </button> */}
           </div>
         </div>
       </div>
