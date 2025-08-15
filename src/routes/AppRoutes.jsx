@@ -8,6 +8,10 @@ import PageNotFound from '../pages/PageNotFound';
 import PostProduct from '../pages/PostProduct';
 import ProductView from '../pages/ProductView';
 import FindProduct from '../pages/FindProduct';
+import Login from '../pages/Login';
+import Signup from '../pages/Signup';
+import MyProfile from '../pages/MyProfile';
+import PaymentSuccess from '../components/PaymentSuccess'
 export default function AppRoutes() {
   return (
     <Routes>
@@ -15,9 +19,10 @@ export default function AppRoutes() {
       <Route element={<WithNav />}>
         <Route path="/" element={<Home />} />
         <Route path="/products" element={<Products />} />
-        <Route path="/post-ad" element={<PostProduct />} />
         <Route path="/product-details/:id" element={<ProductView />} />
         <Route path="/find-product" element={<FindProduct />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Signup />} />
 
       </Route>
       {/* <Route path="/login" element={<Login />} /> */}
@@ -25,7 +30,9 @@ export default function AppRoutes() {
       {/* Protected routes */}
       <Route element={<ProtectedRoute />}>
         <Route element={<WithNav />}>
-          {/* <Route path="/dashboard" element={<Dashboard />} /> */}
+        <Route path="/post-ad" element={<PostProduct />} />
+        <Route path="/my-profile" element={<MyProfile />} />
+        <Route path="/payment-success" element={<PaymentSuccess />} />
         </Route>
       </Route>
 

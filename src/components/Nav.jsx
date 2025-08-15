@@ -12,8 +12,12 @@ import {
   BookmarkIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
+import { logoutSuccess } from "../redux/AuthSlice";
+import { toast } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
 
 const navigation = [
   { name: "Home", path: "/", current: true },
@@ -27,7 +31,29 @@ function classNames(...classes) {
 }
 
 export default function Navbar() {
+
+  const {isAuthenticated, user} = useSelector(state => state.auth)
+
+ const [isLoggingOut, setIsLoggingOut] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+
+const handleLogout = async () => {
+  if (isLoggingOut) return; // prevent double logout
+  setIsLoggingOut(true);
+  try {
+    dispatch(logoutSuccess());
+  } catch (error) {
+    toast.error("Error in signing out");
+    console.log("Error", error);
+  } finally {
+    toast.success("Logout Successfully!");
+    navigate('/');
+    setIsLoggingOut(false);
+  }
+};
+
 
   return (
     <Disclosure as="nav" className="bg-gray-800 relative z-50 ">
@@ -79,6 +105,7 @@ export default function Navbar() {
             </div>
           </div>
           <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+           
             <button
               type="button"
               className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-hidden"
@@ -89,47 +116,50 @@ export default function Navbar() {
             </button>
 
             {/* Profile dropdown */}
-            <Menu as="div" className="relative ml-3">
-              <MenuButton className="relative flex rounded-full bg-gray-800 text-sm focus:outline-hidden focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-gray-800">
-                <span className="absolute -inset-1.5" />
-                <span className="sr-only">Open user menu</span>
-                <img
-                  alt=""
-                  src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                  className="size-8 rounded-full"
-                />
-              </MenuButton>
+            {!user ? (
+  <div className="ml-3">
+    <Link to="/login">
+      <button className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-hidden">
+        Login
+      </button>
+    </Link>
+  </div>
+) : (
+  <Menu as="div" className="relative ml-3">
+    <MenuButton className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-gray-800">
+      <span className="sr-only">Open user menu</span>
+      <p className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-hidden">{user?.username ? user.username : "Gurst"}</p>
+    </MenuButton>
 
-              <MenuItems
-                transition
-                className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black/5 transition focus:outline-hidden data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
-              >
-                <MenuItem>
-                  <Link
-                    to="/"
-                    className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
-                  >
-                    Your Profile
-                  </Link>
-                </MenuItem>
-                <MenuItem>
-                  <Link
-                    to="/"
-                    className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
-                  >
-                    My Ads
-                  </Link>
-                </MenuItem>
-                <MenuItem>
-                  <Link
-                    to="/"
-                    className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
-                  >
-                    Sign out
-                  </Link>
-                </MenuItem>
-              </MenuItems>
-            </Menu>
+    <MenuItems className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black/5 focus:outline-none">
+      <MenuItem>
+        <Link
+          to="/my-profile"
+          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+        >
+          My Profile
+        </Link>
+      </MenuItem>
+      <MenuItem>
+        <Link
+          to="/my-profile"
+          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+        >
+          My Ads
+        </Link>
+      </MenuItem>
+      <MenuItem>
+        <button
+          onClick={handleLogout}
+          className="block w-full text-left px-4 py-2 text-sm text-gray-700 font-semibold hover:bg-gray-100"
+        >
+          Sign out
+        </button>
+      </MenuItem>
+    </MenuItems>
+  </Menu>
+)}
+
           </div>
         </div>
       </div>

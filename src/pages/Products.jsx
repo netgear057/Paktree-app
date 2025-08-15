@@ -1,4 +1,3 @@
-import Pagination from '../components/Pagination'
 import List from '../components/ProductsList'
 
 const Products = () => {
@@ -6,7 +5,6 @@ const Products = () => {
     <div>
 
       <List />
-      <Pagination />
     </div>
   )
 }

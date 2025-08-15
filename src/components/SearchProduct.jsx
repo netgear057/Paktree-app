@@ -8,7 +8,6 @@ import categoriesData from "../assets/json/categoriesData.json";
 import locationData from "../assets/json/locationData.json";
 import Carousel from "../utils/Coursol";
 import SearchSuggestion from "./SearchSujggestion";
-import RelatedProducts from "./RelatedProducts.jSX";
 
 export default function SearchProcut() {
   const dispatch = useDispatch();
@@ -151,12 +150,12 @@ export default function SearchProcut() {
       ):(
         ''
       )}
-      {!items.length > 0 ? (
+      {/* {!items.length > 0 ? ( */}
 
         <SearchSuggestion />
-      ):(
-        <RelatedProducts />
-      )}
+      {/* ):(
+        ''
+      )} */}
       
     </>
   );
