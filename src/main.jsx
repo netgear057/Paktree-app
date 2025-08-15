@@ -5,13 +5,17 @@ import './index.css'
 import App from './App.jsx'
 import { Provider } from 'react-redux'
 import { store } from './redux/Store.js'
+import { FavouritesProvider } from './utils/useFavourites.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
     <Provider store={store}>
-
+      <FavouritesProvider>
     <App />
+
+      </FavouritesProvider>
+
     </Provider>
     </BrowserRouter>
   </StrictMode>,

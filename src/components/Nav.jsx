@@ -17,7 +17,8 @@ import { useLocation } from "react-router-dom";
 import { logoutSuccess } from "../redux/AuthSlice";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import  {useLocalFavourites}  from "../utils/useFavourites";
 
 const navigation = [
   { name: "Home", path: "/", current: true },
@@ -31,7 +32,15 @@ function classNames(...classes) {
 }
 
 export default function Navbar() {
+  const [myfavourites, setMyFavourites] = useState()
+  
+  const { favourites } = useLocalFavourites();
+//  useEffect(() => {
+//   setMyFavourites(favourites);
+//   console.log("inside useeffect");
+// }, [favourites]);
 
+console.log( favourites,"navbar 2")
   const {isAuthenticated, user} = useSelector(state => state.auth)
 
  const [isLoggingOut, setIsLoggingOut] = useState(false);
@@ -105,15 +114,24 @@ const handleLogout = async () => {
             </div>
           </div>
           <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-           
-            <button
-              type="button"
-              className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-hidden"
-            >
-              <span className="absolute -inset-1.5" />
-              <span className="sr-only">View notifications</span>
-              <BookmarkIcon aria-hidden="true" className="size-6" />
-            </button>
+           <button
+  type="button"
+  className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-hidden"
+>
+  <span className="absolute -inset-1.5" />
+  <span className="sr-only">Favourites</span>
+
+  {/* Icon */}
+  <BookmarkIcon aria-hidden="true" className="size-6" />
+
+  {/* Red badge */}
+  {favourites?.length > 0 && (
+    <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-white text-xs font-normal">
+      {favourites?.length}
+    </span>
+  )}
+</button>
+
 
             {/* Profile dropdown */}
             {!user ? (
