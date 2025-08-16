@@ -42,7 +42,6 @@ export default function Navbar() {
 
 console.log( favourites,"navbar 2")
   const {isAuthenticated, user} = useSelector(state => state.auth)
-
  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const location = useLocation();
   const navigate = useNavigate()
@@ -134,7 +133,7 @@ const handleLogout = async () => {
 
 
             {/* Profile dropdown */}
-            {!user ? (
+            {!isAuthenticated ? (
   <div className="ml-3">
     <Link to="/login">
       <button className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-hidden">
