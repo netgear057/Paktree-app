@@ -1,7 +1,6 @@
 // src/store/authSlice.js
 import { createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
-import { login, refreshToken, register,userAds } from "../services/apiServices";
+import { login,  register,userAds } from "../services/apiServices";
 
 
 const storedUser = localStorage.getItem('user') ?
@@ -68,19 +67,7 @@ const authSlice = createSlice({
         state.error = action.payload;
       })
 
-      // REFRESH
-      .addCase(refreshToken.fulfilled, (state, action) => {
-        state.user = action.payload.user;
-        state.accessToken = action.payload.accessToken;
-         state.isAuthenticated = true
-        localStorage.setItem("user", JSON.stringify(action.payload.user));
-        localStorage.setItem("accessToken", action.payload.accessToken);
-      })
-      .addCase(refreshToken.rejected, (state, action) => {
-        state.user = null;
-        state.accessToken = null;
-        state.error = action.payload;
-      })
+     
 
       // user ads
 

@@ -42,7 +42,6 @@ export default function Navbar() {
 
 console.log( favourites,"navbar 2")
   const {isAuthenticated, user} = useSelector(state => state.auth)
-
  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const location = useLocation();
   const navigate = useNavigate()

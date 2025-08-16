@@ -1,8 +1,9 @@
+// services/apiServices.js
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
-import { API } from "../config/apiCongig";
 import axiosInstance from "../utils/Axios";
+import { API } from "../config/apiCongig";
 
+// REGISTER
 export const register = createAsyncThunk(
   "auth/register",
   async (userData, thunkAPI) => {
@@ -22,13 +23,8 @@ export const login = createAsyncThunk(
   "auth/login",
   async ({ email, password }, thunkAPI) => {
     try {
-      const res = await axiosInstance.post(
-        `/users/login`,
-        { email, password },
-        {
-          withCredentials: true,
-        }
-      );
+      const res = await axiosInstance.post("/users/login", { email, password });
+
       return res.data;
     } catch (err) {
       return thunkAPI.rejectWithValue(
@@ -38,27 +34,12 @@ export const login = createAsyncThunk(
   }
 );
 
-// REFRESH
-export const refreshToken = createAsyncThunk(
-  "auth/refresh",
-  async (_, thunkAPI) => {
-    try {
-      const res = await axiosInstance.post("/users/refresh");
-      return res.data;
-    } catch (err) {
-      return thunkAPI.rejectWithValue("Session expired");
-    }
-  }
-);
-
+// FETCH PRODUCTS
 export const fetchProducts = createAsyncThunk(
   "products/fetchAll",
   async (filters, { rejectWithValue }) => {
     try {
-      const res = await axiosInstance.get("/products", {
-        params: filters,
-        withCredentials: true, // ✅ correctly placed inside config object
-      });
+      const res = await axiosInstance.get("/products", { params: filters });
       return res.data;
     } catch (error) {
       return rejectWithValue(error.response?.data || error.message);
@@ -66,11 +47,12 @@ export const fetchProducts = createAsyncThunk(
   }
 );
 
+// POST PRODUCT
 export const postProduct = createAsyncThunk(
   "products/postProduct",
   async (productData, { rejectWithValue }) => {
     try {
-      const res = await axiosInstance.post(`${API}/products`, productData);
+      const res = await axiosInstance.post("/products", productData);
       return res.data;
     } catch (err) {
       return rejectWithValue(err.response?.data || err.message);
@@ -78,30 +60,32 @@ export const postProduct = createAsyncThunk(
   }
 );
 
+// USER ADS
 export const userAds = createAsyncThunk(
   "ads/userAds",
-  async (userId, { rejectWithValue}) => {
+  async (userId, { rejectWithValue }) => {
     try {
-      const res = await axiosInstance.get(`${API}/products/${userId}`)
+      const res = await axiosInstance.get(`/products/${userId}`);
       return res.data;
     } catch (err) {
-      return rejectWithValue(err.response?.data || err.message)
+      return rejectWithValue(err.response?.data || err.message);
     }
   }
-)
+);
 
-export  const handleFeature = async ({postId, userId}) => {
-    try {
-      const res = await fetch(`${API}/stripe/create-checkout-session`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ postId, userId }),
-      });
-      const data = await res.json();
-      if (data.url) {
-        window.location.href = data.url; // Redirect to Stripe Checkout
-      }
-    } catch (err) {
-      console.error(err);
+// FEATURE PRODUCT (Stripe Checkout)
+export const handleFeature = async ({ postId, userId }) => {
+  try {
+    const res = await fetch(`${API}/stripe/create-checkout-session`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ postId, userId }),
+    });
+    const data = await res.json();
+    if (data.url) {
+      window.location.href = data.url; // Redirect to Stripe Checkout
     }
-  };
+  } catch (err) {
+    console.error(err);
+  }
+};
