@@ -12,6 +12,8 @@ import Login from '../pages/Login';
 import Signup from '../pages/Signup';
 import MyProfile from '../pages/MyProfile';
 import PaymentSuccess from '../components/PaymentSuccess'
+import ForgotPassword from '../components/ForgotPassword';
+import ResetPassword from '../components/ResetPassword';
 export default function AppRoutes() {
   return (
     <Routes>
@@ -23,6 +25,9 @@ export default function AppRoutes() {
         <Route path="/find-product" element={<FindProduct />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Signup />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password/:token" element={<ResetPassword />} />
+
 
       </Route>
       {/* <Route path="/login" element={<Login />} /> */}
