@@ -67,8 +67,8 @@ console.log(userId)
       .find((p) => p.province === province)
       ?.districts.find((d) => d.name === district)?.tehsils || [];
 
-  // Handle image input change and preview
-  const handleImageChange = (event, setFieldValue) => {
+  // Hand le image input change and preview
+  const  handleImageChange = (event, setFieldValue) => {
     const file = event.currentTarget.files[0];
     if (file) {
       const allowedTypes = [
