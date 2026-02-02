@@ -10,6 +10,7 @@ import Pagination from "../utils/Pagination";
 export default function List() {
   const dispatch = useDispatch();
   const { items, total } = useSelector((state) => state.products);
+  console.log(items,total,"items form list")
   const [page, setPage] = useState(1);
   const itemsPerPage = 12;
   const [filters, setFilters] = useState({

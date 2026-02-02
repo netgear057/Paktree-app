@@ -19,6 +19,7 @@ import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import  {useLocalFavourites}  from "../utils/useFavourites";
+import { logoutUser } from "../services/apiServices";
 
 const navigation = [
   { name: "Home", path: "/", current: true },
@@ -40,8 +41,8 @@ export default function Navbar() {
 //   console.log("inside useeffect");
 // }, [favourites]);
 
-console.log( favourites,"navbar 2")
-  const {isAuthenticated, user} = useSelector(state => state.auth)
+const {isAuthenticated, user} = useSelector(state => state.auth)
+console.log( isAuthenticated,user,"navbar 2")
  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const location = useLocation();
   const navigate = useNavigate()
@@ -51,7 +52,7 @@ const handleLogout = async () => {
   if (isLoggingOut) return; // prevent double logout
   setIsLoggingOut(true);
   try {
-    dispatch(logoutSuccess());
+    dispatch(logoutUser());
   } catch (error) {
     toast.error("Error in signing out");
     console.log("Error", error);
@@ -133,7 +134,7 @@ const handleLogout = async () => {
 
 
             {/* Profile dropdown */}
-            {!user ? (
+            {!isAuthenticated ? (
   <div className="ml-3">
     <Link to="/login">
       <button className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-hidden">

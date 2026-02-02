@@ -1,31 +1,39 @@
 // src/store/authSlice.js
 import { createSlice } from "@reduxjs/toolkit";
-import { login,  register,userAds } from "../services/apiServices";
+import { login,  logoutUser,  register,restoreSession,userAds } from "../services/apiServices";
 
 
-const storedUser = localStorage.getItem('user') ?
-JSON.parse(localStorage.getItem('user')) : null
+// const storedUser = localStorage.getItem('user') ?
+// JSON.parse(localStorage.getItem('user')) : null
 
-const storedToken = localStorage.getItem('accessToken') || null
+// const storedToken = localStorage.getItem('accessToken') || null
 
 const authSlice = createSlice({
   name: "auth",
   initialState: {
-    user: storedUser,
-    allAds : [],
-    accessToken: storedToken,
-    isAuthenticated: !! storedUser,
+    user: null,
+    isAuthenticated: false,
     status: "idle",
     error: null,
+    allAds: []
   },
+  //====================local staorage==============================
+  // initialState: {
+  //   user: storedUser,
+  //   allAds : [],
+  //   accessToken: storedToken,
+  //   isAuthenticated: !! storedUser,
+  //   status: "idle",
+  //   error: null,
+  // },
   reducers: {
     logoutSuccess(state) {
       state.user = null;
-      state.accessToken = null;
+      // state.accessToken = null;
       state.status = "idle";
       state.error = null;
-      localStorage.removeItem("user");
-      localStorage.removeItem("accessToken");
+      // localStorage.removeItem("user");
+      // localStorage.removeItem("accessToken");
     },
   },
   extraReducers: (builder) => {
@@ -38,11 +46,11 @@ const authSlice = createSlice({
       .addCase(register.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.user = action.payload.user;
-        state.accessToken = action.payload.accessToken;
+        // state.accessToken = action.payload.accessToken;
         state.isAuthenticated = true
 
-        localStorage.setItem("user", JSON.stringify(action.payload.user));
-        localStorage.setItem("accessToken", action.payload.accessToken);
+        // localStorage.setItem("user", JSON.stringify(action.payload.user));
+        // localStorage.setItem("accessToken", action.payload.accessToken);
       })
       .addCase(register.rejected, (state, action) => {
         state.status = "failed";
@@ -57,10 +65,10 @@ const authSlice = createSlice({
       .addCase(login.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.user = action.payload.user;
-        state.accessToken = action.payload.accessToken;
+        // state.accessToken = action.payload.accessToken;
         state.isAuthenticated = true
-        localStorage.setItem("user", JSON.stringify(action.payload.user));
-        localStorage.setItem("accessToken", action.payload.accessToken);
+        // localStorage.setItem("user", JSON.stringify(action.payload.user));
+        // localStorage.setItem("accessToken", action.payload.accessToken);
       })
       .addCase(login.rejected, (state, action) => {
         state.status = "failed";
@@ -84,6 +92,29 @@ const authSlice = createSlice({
         state.status = "failed";
         state.error = action.payload;
       })
+
+  // Restore session/me
+     .addCase(restoreSession.pending, (state) => {
+  state.status = "loading";
+})
+.addCase(restoreSession.fulfilled, (state, action) => {
+  state.status = "succeeded";
+  state.user = action.payload.user; // or action.payload
+  state.isAuthenticated = true;
+})
+.addCase(restoreSession.rejected, (state) => {
+  state.status = "idle";
+  state.user = null;
+  state.isAuthenticated = false;
+})
+// =========== Logout =====================
+.addCase(logoutUser.fulfilled, (state) => {
+  state.user = null;
+  state.isAuthenticated = false;
+  state.status = "idle";
+})
+
+
   },
 });
 
