@@ -89,3 +89,28 @@ export const handleFeature = async ({ postId, userId }) => {
     console.error(err);
   }
 };
+
+// RESTORE SESSION
+export const restoreSession = createAsyncThunk(
+  "auth/restoreSession",
+  async (_, thunkAPI) => {
+    try {
+      const res = await axiosInstance.get("/users/me");
+
+      return res.data; // or res.data.user (depending on backend)
+    } catch (err) {
+      return thunkAPI.rejectWithValue(
+        err.response?.data?.message || "Session expired"
+      );
+    }
+  }
+);
+
+// logout user
+export const logoutUser = createAsyncThunk(
+  "auth/logoutUser",
+  async (_, thunkAPI) => {
+    await axiosInstance.post("/users/logout", {}, { withCredentials: true });
+    return true;
+  }
+);

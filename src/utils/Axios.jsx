@@ -1,24 +1,48 @@
 import axios from "axios";
-import {API} from '../config/apiCongig'
+import { API } from "../config/apiCongig";
 
-// Create axios instance
 const axiosInstance = axios.create({
   baseURL: API,
-  headers: {
-    "Content-Type": "application/json",
-  },
+  withCredentials: true, // 🔴 REQUIRED for cookies
 });
 
-// Add request interceptor to attach token
-axiosInstance.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem("accessToken"); // 👈 get token
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => Promise.reject(error)
+let isRefreshing = false;
+let failedQueue = [];
+
+const processQueue = (error = null) => {
+  failedQueue.forEach((prom) => {
+    if (error) prom.reject(error);
+    else prom.resolve();
+  });
+  failedQueue = [];
+};
+
+axiosInstance.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config;
+
+    // console.log("Interceptor triggered:", error.response?.status); // debug
+
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+      try { 
+       await axiosInstance.post("/users/refresh");
+        processQueue();
+         return axiosInstance(originalRequest);
+         } catch (err) { processQueue(err); // ❌ Refresh failed → force logout
+          window.location.href = "/login"; 
+          return Promise.reject(err);
+         } finally { isRefreshing = false;
+
+          }
+         }
+    
+
+    return Promise.reject(error);
+  }
 );
 
+
 export default axiosInstance;
+
