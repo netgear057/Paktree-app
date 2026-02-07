@@ -3,11 +3,12 @@ import { API } from "../config/apiCongig";
 
 const axiosInstance = axios.create({
   baseURL: API,
-  withCredentials: true, // 🔴 REQUIRED for cookies
+  withCredentials: true,
 });
 
 let isRefreshing = false;
 let failedQueue = [];
+let isLoggingOut = false; // 🔒 HARD STOP FLAG
 
 const processQueue = (error = null) => {
   failedQueue.forEach((prom) => {
@@ -22,27 +23,46 @@ axiosInstance.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
-    // console.log("Interceptor triggered:", error.response?.status); // debug
+    // 🚫 NEVER intercept refresh
+    if (originalRequest.url.includes("/users/refresh")) {
+      return Promise.reject(error);
+    }
+
+    // 🚫 STOP EVERYTHING after logout starts
+    if (isLoggingOut) {
+      return Promise.reject(error);
+    }
 
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
-      try { 
-       await axiosInstance.post("/users/refresh");
-        processQueue();
-         return axiosInstance(originalRequest);
-         } catch (err) { processQueue(err); // ❌ Refresh failed → force logout
-          window.location.href = "/login"; 
-          return Promise.reject(err);
-         } finally { isRefreshing = false;
 
-          }
-         }
-    
+      if (isRefreshing) {
+        return new Promise((resolve, reject) => {
+          failedQueue.push({ resolve, reject });
+        }).then(() => axiosInstance(originalRequest));
+      }
+
+      isRefreshing = true;
+
+      try {
+        await axiosInstance.post("/users/refresh");
+        processQueue();
+        return axiosInstance(originalRequest);
+      } catch (err) {
+        processQueue(err);
+
+        // ✅ ONE-TIME logout
+        isLoggingOut = true;
+
+        // Let your app router handle navigation
+        return Promise.reject(err);
+      } finally {
+        isRefreshing = false;
+      }
+    }
 
     return Promise.reject(error);
   }
 );
 
-
 export default axiosInstance;
-

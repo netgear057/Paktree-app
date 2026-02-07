@@ -4,6 +4,7 @@ import { login } from "../services/apiServices";
 import { toast } from "react-toastify";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { API } from "../config/apiCongig";
 export default function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -112,7 +113,15 @@ export default function LoginForm() {
               </button>
             </div>
           </form>
+  <div className="flex h-20 w-auto justify-center items-center flex-col gap-2 ">
 
+    <p> or </p>
+
+  <a href={`${API}/auth/google`}>
+  Continue with Google
+  </a>
+  </div>
+  
           <p className="mt-10 text-center text-sm/6 text-gray-500">
             Don't have an account?{" "}
             <Link
